@@ -1,15 +1,15 @@
-From 0330aa4d1899a376d42cf286b66940cfc96c06a0 Mon Sep 17 00:00:00 2001
+From 9f55304f6302ff655dc209086d25ec6062a50eb0 Mon Sep 17 00:00:00 2001
 From: jneira <atreyu.bbb@gmail.com>
-Date: Fri, 25 May 2018 10:08:24 +0200
+Date: Mon, 28 May 2018 08:53:38 +0200
 Subject: [PATCH] Patched
 
 ---
- Text/Megaparsec/Internal.hs | 13 ++++++++++++-
+ Text/Megaparsec/Internal.hs | 15 +++++++++++++--
  megaparsec.cabal            |  2 ++
- 2 files changed, 14 insertions(+), 1 deletion(-)
+ 2 files changed, 15 insertions(+), 2 deletions(-)
 
 diff --git a/Text/Megaparsec/Internal.hs b/Text/Megaparsec/Internal.hs
-index 8c338af..c167439 100644
+index 8c338af..7a43085 100644
 --- a/Text/Megaparsec/Internal.hs
 +++ b/Text/Megaparsec/Internal.hs
 @@ -68,6 +68,17 @@ import qualified Control.Monad.Fail  as Fail
@@ -29,6 +29,15 @@ index 8c338af..c167439 100644
 +
  ----------------------------------------------------------------------------
  -- Data types
+ 
+@@ -173,7 +184,7 @@ pMap f p = ParsecT $ \s cok cerr eok eerr ->
+ 
+ instance Stream s => Applicative (ParsecT e s m) where
+   pure     = pPure
+-  (<*>)    = pAp
++  (<*>)    = trampoline $ pAp
+   p1 *> p2 = p1 `pBind` const p2
+   p1 <* p2 = do { x1 <- p1 ; void p2 ; return x1 }
  
 @@ -614,7 +625,7 @@ runParsecT :: Monad m
    => ParsecT e s m a -- ^ Parser to run
